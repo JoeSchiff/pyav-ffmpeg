@@ -15,6 +15,14 @@ import time
 from dataclasses import dataclass, field, replace
 
 
+print(666666666)
+if os.path.isdir('/usr/lib/x86_64-linux-gnu/pkgconfig'):
+    print("666666666a")
+    os.listdir('/usr/lib/x86_64-linux-gnu/pkgconfig')
+else:
+    print("666666666b")
+    
+    
 def fetch(url: str, path: str) -> None:
     run(["curl", "-L", "-o", path, url])
 
@@ -102,8 +110,23 @@ def run(cmd, env=None):
     try:
         subprocess.run(cmd, check=True, env=env, stderr=subprocess.PIPE, text=True)
     except subprocess.CalledProcessError as e:
-        print(f"stderr: {e.stderr}")
+        print(f"1111111stderr: {e.stderr}")
+        print(os.getenv("PKG_CONFIG_PATH"))
+        find_file("ffbuild/config.log")
         raise e
+
+
+def find_file(target_path):
+    target_dir, target_file = os.path.split(target_path)
+    for root, dirs, files in os.walk("/"):
+        if target_dir in dirs:
+            potential_dir = os.path.join(root, target_dir)
+            if target_file in os.listdir(potential_dir):
+                full_path = os.path.join(potential_dir, target_file)
+                print(f"2222222Found: {full_path}")
+                with open(full_path, 'r') as log_file:
+                    print(log_file.read())
+
 
 
 @dataclass
@@ -224,8 +247,23 @@ class Builder:
                 configure_args += ["--target=x86_64-win64-gcc"]
 
         # build package
+        print(77777777777)
         os.makedirs(package_build_path, exist_ok=True)
+        if os.path.isdir('/usr/lib/x86_64-linux-gnu/pkgconfig'):
+            print("77777777a")
+            os.listdir('/usr/lib/x86_64-linux-gnu/pkgconfig')
+        else:
+            print("77777777b")
+
+        for i in env["PKG_CONFIG_PATH"].split(':'):
+            print(88888888, i)
+            try:
+                print(os.listdir(i))
+            except Exception as err:
+                print('88888888b', err)
+
         with chdir(package_build_path):
+            print(99999999, self._mangle_path(os.path.join(package_source_path, "configure")))
             run(
                 [
                     "sh",

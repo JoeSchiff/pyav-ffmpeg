@@ -11,6 +11,12 @@ plat = platform.system()
 
 library_group = [
     Package(
+        name="srt",
+        source_url="https://github.com/Haivision/srt/archive/refs/tags/v1.5.4.tar.gz",
+        build_system="cmake",
+        #build_arguments=["-DENABLE_STDCXX_SYNC=ON"],
+    ),
+    Package(
         name="xz",
         source_url="https://github.com/tukaani-project/xz/releases/download/v5.4.4/xz-5.4.4.tar.xz",
         build_arguments=[
@@ -37,6 +43,8 @@ library_group = [
         build_arguments=["--without-python"],
     ),
 ]
+
+
 
 gnutls_group = [
     Package(
@@ -219,6 +227,12 @@ def download_tars(use_gnutls, stage):
 
 
 def main():
+    print(5555555555)
+    if os.path.isdir('/usr/lib/x86_64-linux-gnu/pkgconfig'):
+        print("5555555555a")
+        os.listdir('/usr/lib/x86_64-linux-gnu/pkgconfig')
+    else:
+        print("5555555555b")
     global library_group
 
     parser = argparse.ArgumentParser("build-ffmpeg")
@@ -230,9 +244,12 @@ def main():
     )
     parser.add_argument("--disable-gpl", action="store_true")
     args = parser.parse_args()
+    print('args:', args)
 
     dest_dir = args.destination
+    print(f"{dest_dir=}")
     build_stage = None if args.stage is None else int(args.stage) - 1
+    print(f"{build_stage=}")
     disable_gpl = args.disable_gpl
     del args
 
@@ -317,6 +334,7 @@ def main():
         "--enable-libopencore-amrwb",
         "--enable-libopus",
         "--enable-libspeex",
+        "--enable-libsrt",
         "--enable-libtwolame",
         "--enable-libvorbis",
         "--enable-libvpx",
