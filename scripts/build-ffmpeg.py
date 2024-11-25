@@ -7,6 +7,7 @@ import subprocess
 
 from cibuildpkg import Builder, Package, fetch, get_platform, log_group, run
 
+
 plat = platform.system()
 
 library_group = [
@@ -35,7 +36,7 @@ library_group = [
         requires=["xz"],
         source_url="https://download.gnome.org/sources/libxml2/2.9/libxml2-2.9.13.tar.xz",
         build_arguments=["--without-python"],
-    ),
+    )
 ]
 
 gnutls_group = [
@@ -182,6 +183,19 @@ openh264 = Package(
     build_system="meson",
 )
 
+if plat == "Windows":
+    #srt_build_arg = [r"-DOPENSSL_ROOT_DIR=D:\a\_temp\msys64\usr\bin"]
+    srt_build_arg = [r"-DOPENSSL_ROOT_DIR=C:\Program Files\OpenSSL"]
+else:
+    srt_build_arg = []
+
+srt_package = Package(
+    name="srt",
+    source_url="https://github.com/Haivision/srt/archive/refs/tags/v1.5.4.tar.gz",
+    build_system="cmake",
+    build_arguments=srt_build_arg,
+)
+
 ffmpeg_package = Package(
     name="ffmpeg",
     source_url="https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz",
@@ -205,6 +219,8 @@ def download_tars(use_gnutls, stage):
         the_packages = codec_group
     else:
         the_packages = []
+
+    the_packages.append(srt_package)
 
     for package in the_packages:
         tarball = os.path.join(
@@ -323,6 +339,7 @@ def main():
         "--enable-libopencore-amrwb",
         "--enable-libopus",
         "--enable-libspeex",
+        "--enable-libsrt",
         "--enable-libtwolame",
         "--enable-libvorbis",
         "--enable-libvpx",
@@ -354,7 +371,7 @@ def main():
     if use_gnutls:
         library_group += gnutls_group
 
-    package_groups = [library_group + codec_group, [ffmpeg_package]]
+    package_groups = [library_group + codec_group, [srt_package, ffmpeg_package]]
     if build_stage is not None:
         packages = package_groups[build_stage]
     else:

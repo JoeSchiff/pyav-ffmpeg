@@ -243,6 +243,9 @@ class Builder:
         package_source_path = os.path.join(package_path, package.source_dir)
         package_build_path = os.path.join(package_path, package.build_dir)
 
+        if package.name == "srt" and platform.system() == "Linux":
+            run(["yum", "-y", "install", "openssl-devel"])
+
         # determine cmake arguments
         env = self._environment(for_builder=for_builder)
         prefix = self._prefix(for_builder=for_builder)
