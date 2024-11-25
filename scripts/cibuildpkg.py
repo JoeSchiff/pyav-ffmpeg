@@ -245,6 +245,10 @@ class Builder:
 
         # determine cmake arguments
         env = self._environment(for_builder=for_builder)
+        
+        print(11111111111111111)
+        print(package.name, env)
+        
         prefix = self._prefix(for_builder=for_builder)
         cmake_args = [
             "-GUnix Makefiles",
@@ -404,6 +408,10 @@ class Builder:
         prepend_env(
             env, "LDFLAGS", "-L" + self._mangle_path(os.path.join(prefix, "lib"))
         )
+        
+        if platform.system() == "Windows":
+            env["PKG_CONFIG_PATH"] = "C:\\msys64\\mingw64\\share\\pkgconfig"
+        
         prepend_env(
             env,
             "PKG_CONFIG_PATH",
