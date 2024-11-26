@@ -7,7 +7,15 @@ import subprocess
 
 from cibuildpkg import Builder, Package, fetch, get_platform, log_group, run
 
+
 plat = platform.system()
+
+
+if plat == "Windows":
+    srt_build_arg = [r"-DOPENSSL_ROOT_DIR=C:\Program Files\OpenSSL"]
+else:
+    srt_build_arg = []
+    
 
 library_group = [
     Package(
@@ -35,7 +43,7 @@ library_group = [
         requires=["xz"],
         source_url="https://download.gnome.org/sources/libxml2/2.9/libxml2-2.9.13.tar.xz",
         build_arguments=["--without-python"],
-    ),
+    )
 ]
 
 gnutls_group = [
@@ -73,8 +81,8 @@ codec_group = [
     Package(
         name="aom",
         requires=["cmake"],
-        source_url="https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz",
-        source_strip_components=0,
+        source_url="https://storage.googleapis.com/aom-releases/libaom-3.11.0.tar.gz",
+        source_strip_components=1,
         build_system="cmake",
         build_arguments=[
             "-DENABLE_DOCS=0",
@@ -172,15 +180,22 @@ codec_group = [
         source_dir="source",
         gpl=True,
     ),
+    Package(
+        name="srt",
+        source_url="https://github.com/Haivision/srt/archive/refs/tags/v1.5.4.tar.gz",
+        build_system="cmake",
+        build_arguments=srt_build_arg,
+    ),
 ]
 
 openh264 = Package(
     name="openh264",
     requires=["meson", "nasm", "ninja"],
-    source_filename="openh264-2.4.1.tar.gz",
-    source_url="https://github.com/cisco/openh264/archive/refs/tags/v2.4.1.tar.gz",
+    source_filename="openh264-2.5.0.tar.gz",
+    source_url="https://github.com/cisco/openh264/archive/refs/tags/v2.5.0.tar.gz",
     build_system="meson",
 )
+
 
 ffmpeg_package = Package(
     name="ffmpeg",
@@ -228,7 +243,9 @@ def main():
         default=None,
         help="AArch64 build requires stage and possible values can be 1, 2",
     )
+    parser.add_argument("--enable-gpl", action="store_true")
     parser.add_argument("--disable-gpl", action="store_true")
+
     args = parser.parse_args()
 
     dest_dir = args.destination
@@ -307,16 +324,21 @@ def main():
         "--disable-libfontconfig",
         "--disable-libbluray",
         "--disable-libopenjpeg",
-        "--enable-mediafoundation" if plat == "Windows" else "--disable-mediafoundation",
+        (
+            "--enable-mediafoundation"
+            if plat == "Windows"
+            else "--disable-mediafoundation"
+        ),
         "--enable-gmp",
         "--enable-gnutls" if use_gnutls else "--disable-gnutls",
-        "--enable-libaom",
+        "--enable-libaom" if plat != "Windows" else "--disable-libaom",
         "--enable-libdav1d",
         "--enable-libmp3lame",
         "--enable-libopencore-amrnb",
         "--enable-libopencore-amrwb",
         "--enable-libopus",
         "--enable-libspeex",
+        "--enable-libsrt",
         "--enable-libtwolame",
         "--enable-libvorbis",
         "--enable-libvpx",
@@ -420,3 +442,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
