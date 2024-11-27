@@ -105,7 +105,6 @@ def run(cmd, env=None):
         print(f"stderr: {e.stderr}")
         raise e
 
-
 @dataclass
 class Package:
     name: str
@@ -216,12 +215,16 @@ class Builder:
                 if platform.machine() == "arm64":
                     configure_args += ["--target=arm64-darwin20-gcc"]
                 elif platform.machine() == "x86_64":
-                    configure_args += ["--target=x86_64-darwin20-gcc"]
+                    configure_args += ["--target=x86_64-darwin13-gcc"]
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
-
+                
+            if (package.name == "srt" or package.name == "ffmpeg") and platform.system() == "Linux":
+                run(["yum", "-y", "install", "openssl-devel"])
+                
         # build package
         os.makedirs(package_build_path, exist_ok=True)
+
         with chdir(package_build_path):
             run(
                 [
@@ -236,6 +239,7 @@ class Builder:
                 ["make"] + make_args(parallel=package.build_parallel) + ["V=1"], env=env
             )
             run(["make", "install"], env=env)
+
 
     def _build_with_cmake(self, package: Package, for_builder: bool) -> None:
         assert package.build_system == "cmake"
