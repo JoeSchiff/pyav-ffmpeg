@@ -57,7 +57,7 @@ jobs:
           install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
           path-type: inherit
           release: false
-          run: pacman -Suy
+          update: true
       - name: Build FFmpeg
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
