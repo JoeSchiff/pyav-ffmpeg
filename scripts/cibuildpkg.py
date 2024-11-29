@@ -90,7 +90,7 @@ def make_args(*, parallel: bool) -> list[str]:
 
 
 def prepend_env(env, name, new, separator=" "):
-    real_sep = ";"
+    real_sep = ":"
     old = env.get(name)
     if old:
         env[name] = new + real_sep + old
@@ -227,7 +227,7 @@ class Builder:
             for k,v in env.items():
                 print(k, v)
             print(2222222222222)
-            env["PKG_CONFIG_PATH"] = 'C:\\cibw\\vendor\\lib\\pkgconfig;C:\\msys64\\mingw64\\lib\\pkgconfig;C:\\msys64\\mingw64\\share\\pkgconfig'
+            env["PKG_CONFIG_PATH"] = '/c/cibw/vendor/lib/pkgconfig:/c/msys64/mingw64/lib/pkgconfig:/c/msys64/mingw64/share/pkgconfig:/d/a/_temp/msys64/mingw64/share/pkgconfig:/d/a/_temp/msys64/mingw64/lib/pkgconfig'
             print(env["PKG_CONFIG_PATH"])
             
         # build package
