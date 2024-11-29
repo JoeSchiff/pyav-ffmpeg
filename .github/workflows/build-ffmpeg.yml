@@ -55,7 +55,7 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
+          install: pip base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
           release: false
           cache: false
       - name: Build FFmpeg
