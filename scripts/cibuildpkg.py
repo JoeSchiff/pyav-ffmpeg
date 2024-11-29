@@ -90,7 +90,7 @@ def make_args(*, parallel: bool) -> list[str]:
 
 
 def prepend_env(env, name, new, separator=" "):
-    real_sep = ":"
+    real_sep = ";"
     old = env.get(name)
     if old:
         env[name] = new + real_sep + old
