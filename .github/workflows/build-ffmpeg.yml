@@ -33,7 +33,7 @@ jobs:
             arch: x86_64
             shell: bash
           - os: windows-latest
-            arch: x86_64
+            arch: AMD64
             shell: 'msys2 {0}'
     defaults:
       run:
