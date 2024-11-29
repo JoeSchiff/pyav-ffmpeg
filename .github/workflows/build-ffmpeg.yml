@@ -79,8 +79,11 @@ jobs:
           path: output/
       - name: print ffbuild
         if: failure()
-        run: find /c /d -path "*/ffbuild/config.log" -type f -exec sh -c 'echo "=== found ffbuild/config.log {} ==="; cat {}' \;
-
+        run: |
+          find /c /d -path "*/ffbuild/config.log" -type f -exec sh -c 'echo "=== found ffbuild/config.log {} ==="; cat {}' \;
+          echo 9999999999
+          ls -al /c/cibw/vendor/lib/pkgconfig
+          cat /c/cibw/vendor/lib/pkgconfig/aom.pc
   build-qemu-stage-1:
     runs-on: ${{ matrix.os }}
     strategy:
