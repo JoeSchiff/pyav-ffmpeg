@@ -55,7 +55,7 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: pip base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
+          install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
           release: false
           cache: false
       - name: Build FFmpeg
@@ -69,7 +69,7 @@ jobs:
           CIBW_SKIP: "*musllinux*"
           CIBW_TEST_COMMAND: python -c "import dummy"
         run: |
-          pip install cibuildwheel delvewheel
+          python -m pip install cibuildwheel delvewheel
           cibuildwheel --output-dir output
           rm -f output/*.whl
       - name: Upload FFmpeg
