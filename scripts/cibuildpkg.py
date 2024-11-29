@@ -90,9 +90,10 @@ def make_args(*, parallel: bool) -> list[str]:
 
 
 def prepend_env(env, name, new, separator=" "):
+    real_sep = ";"
     old = env.get(name)
     if old:
-        env[name] = new + separator + old
+        env[name] = new + real_sep + old
     else:
         env[name] = new
 
@@ -220,6 +221,15 @@ class Builder:
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
 
+        if package.name == "ffmpeg" and platform.system() == "Windows":
+            print(1111111111111)
+            print(env["PKG_CONFIG_PATH"])
+            for k,v in env.items():
+                print(k, v)
+            print(2222222222222)
+            env["PKG_CONFIG_PATH"] = 'C:\\cibw\\vendor\\lib\\pkgconfig;C:\\msys64\\mingw64\\lib\\pkgconfig;C:\\msys64\\mingw64\\share\\pkgconfig'
+            print(env["PKG_CONFIG_PATH"])
+            
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
@@ -408,7 +418,7 @@ class Builder:
             env,
             "PKG_CONFIG_PATH",
             self._mangle_path(os.path.join(prefix, "lib", "pkgconfig")),
-            separator=":",
+            separator=os.pathsep,
         )
 
         if platform.system() == "Darwin" and not for_builder:
@@ -420,9 +430,11 @@ class Builder:
 
     def _mangle_path(self, path: str) -> str:
         if platform.system() == "Windows":
+            print(f"1_mangle_path {path}")
             path = path.replace(os.path.sep, "/")
             if path[1] == ":":
                 path = f"/{path[0].lower()}{path[2:]}"
+            print(f"2_mangle_path {path}")
         return path
 
     def _prefix(self, *, for_builder: bool) -> str:
