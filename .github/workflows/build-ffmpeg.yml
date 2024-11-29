@@ -57,6 +57,7 @@ jobs:
           update: true
           install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
           release: false
+          cache: false
       - name: Build FFmpeg
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
