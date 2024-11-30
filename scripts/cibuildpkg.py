@@ -204,6 +204,7 @@ class Builder:
         # determine configure arguments
         env = self._environment(for_builder=for_builder)
         prefix = self._prefix(for_builder=for_builder)
+        print(111111111, f"{prefix=}")
         configure_args = [
             "--disable-static",
             "--enable-shared",
@@ -219,7 +220,7 @@ class Builder:
                     configure_args += ["--target=x86_64-darwin20-gcc"]
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
-
+        print(222222222, f"{configure_args=}")
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
@@ -271,6 +272,24 @@ class Builder:
 
     def _build_with_meson(self, package: Package, for_builder: bool) -> None:
         assert package.build_system == "meson"
+        
+        if package.name == "dav1d":
+            try:
+                print(3333333)
+                run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(4444444)
+                run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(55555555)
+                run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
+            except Exception as err:
+                print(err)
+            
         package_path = os.path.join(self.build_dir, package.name)
         package_source_path = os.path.join(package_path, package.source_dir)
         package_build_path = os.path.join(package_path, package.build_dir)
