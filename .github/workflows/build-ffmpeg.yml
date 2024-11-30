@@ -54,7 +54,6 @@ jobs:
       - uses: msys2/setup-msys2@v2
         if: matrix.os == 'windows-latest'
         with:
-          msystem: UCRT64
           update: true
           install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
           path-type: inherit
