@@ -66,6 +66,7 @@ jobs:
           PKG_CONFIG_SYSTEM_INCLUDE_PATH: /c/msys64/mingw64/include
           PKG_CONFIG_SYSTEM_LIBRARY_PATH: /c/msys64/mingw64/lib
           SYSTEMDRIVE: /c/
+          PKG_CONFIG_DEBUG_SPEW: 1
         run: |
           echo "PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
           export PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH
