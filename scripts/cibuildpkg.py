@@ -272,7 +272,9 @@ class Builder:
         # build package
         os.makedirs(package_build_path, exist_ok=True)       
 
-        run(["pkg-config", "--define-prefix", "--cflags", "--libs", "/c/cibw/vendor/lib/pkgconfig/aom.pc"])
+        if package.name == "ffmpeg":
+            run(["pkg-config", "--define-prefix", "--cflags", "--libs", "/c/cibw/vendor/lib/pkgconfig/aom.pc"])
+            
         with chdir(package_build_path):
             run(
                 [
