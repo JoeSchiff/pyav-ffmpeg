@@ -220,9 +220,33 @@ class Builder:
                     configure_args += ["--target=x86_64-darwin20-gcc"]
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
-        print(222222222, f"{configure_args=}")
+        
         # build package
         os.makedirs(package_build_path, exist_ok=True)
+
+        if package.name == "ffmpeg":
+            try:
+                print(3333333)
+                run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(4444444)
+                run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(55555555)
+                run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(66666666666)
+                print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
+                shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
+            except Exception as err:
+                print(err)
+        
         with chdir(package_build_path):
             run(
                 [
@@ -257,31 +281,7 @@ class Builder:
             cmake_args.append("-DCMAKE_INSTALL_NAME_DIR=" + os.path.join(prefix, "lib"))
 
         # build package
-        os.makedirs(package_build_path, exist_ok=True)
-
-        
-        if package.name == "aom":
-            try:
-                print(3333333)
-                run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(4444444)
-                run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(55555555)
-                run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
-            except Exception as err:
-                print(err)
-            
-            print(66666666666)
-            print(package_build_path)
-            print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
-            shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
-            
+        os.makedirs(package_build_path, exist_ok=True)            
         with chdir(package_build_path):
             run(
                 ["cmake", package_source_path] + cmake_args + package.build_arguments,
