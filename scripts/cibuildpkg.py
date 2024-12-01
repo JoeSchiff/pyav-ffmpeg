@@ -141,10 +141,6 @@ class Builder:
         installed_file = os.path.join(installed_dir, package.name)
         if os.path.exists(installed_file):
             return
-
-        if package.name == "aom":
-            import shutil
-            shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
         
         with log_group(f"build {package.name}"):
             self._extract(package)
@@ -262,6 +258,14 @@ class Builder:
 
         # build package
         os.makedirs(package_build_path, exist_ok=True)
+
+        
+        if package.name == "aom":
+            print(66666666666)
+            print(package_build_path)
+            print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
+            shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
+            
         with chdir(package_build_path):
             run(
                 ["cmake", package_source_path] + cmake_args + package.build_arguments,
