@@ -142,6 +142,10 @@ class Builder:
         if os.path.exists(installed_file):
             return
 
+        if package.name == "aom":
+            import shutil
+            shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
+        
         with log_group(f"build {package.name}"):
             self._extract(package)
             if package.name == "x265":
@@ -429,8 +433,6 @@ class Builder:
             self._mangle_path(os.path.join(prefix, "lib", "pkgconfig")),
             separator=":",
         )
-        import shutil
-        shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
         
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
