@@ -204,8 +204,7 @@ class Builder:
 
         if package.name == "aom":
             correct_pc_file()
-        for k,v in env.items():
-            print(k,v)
+        
 
     def create_directories(self) -> None:
         # print debugging information
