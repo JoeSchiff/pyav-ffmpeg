@@ -261,6 +261,22 @@ class Builder:
 
         
         if package.name == "aom":
+            try:
+                print(3333333)
+                run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(4444444)
+                run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
+            except Exception as err:
+                print(err)
+            try:
+                print(55555555)
+                run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
+            except Exception as err:
+                print(err)
+            
             print(66666666666)
             print(package_build_path)
             print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
@@ -283,17 +299,17 @@ class Builder:
         
         if package.name == "dav1d":
             try:
-                print(3333333)
+                print(33333332)
                 run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
             except Exception as err:
                 print(err)
             try:
-                print(4444444)
+                print(44444442)
                 run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
             except Exception as err:
                 print(err)
             try:
-                print(55555555)
+                print(555555552)
                 run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
             except Exception as err:
                 print(err)
