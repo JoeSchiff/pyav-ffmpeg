@@ -205,6 +205,8 @@ class Builder:
         if package.name == "aom":
             correct_pc_file()
 
+        
+
     def create_directories(self) -> None:
         # print debugging information
         if platform.system() == "Darwin":
@@ -469,7 +471,7 @@ class Builder:
     def _mangle_path(self, path: str) -> str:
         if platform.system() == "Windows":
             print(f"_mangle_path1{path}")
-            path = subprocess.run(["cygpath", "-m", path], capture_output=True).stdout.decode("utf-8")
+            path = subprocess.run(["cygpath", "-u", path], capture_output=True).stdout.decode("utf-8")
         print(f"_mangle_path2{path}")
         return path
 
