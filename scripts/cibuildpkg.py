@@ -134,6 +134,28 @@ class Builder:
         self.source_dir = os.path.abspath("source")
 
     def build(self, package: Package, *, for_builder: bool = False):
+        print(22222222222222222222, package.name)
+        try:
+            print(3333333)
+            run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
+        except Exception as err:
+            print(err)
+        try:
+            print(4444444)
+            run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
+        except Exception as err:
+            print(err)
+        try:
+            print(55555555)
+            run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
+        except Exception as err:
+            print(err)
+        try:
+            print(66666666666)
+            print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
+        except Exception as err:
+            print(err)
+        
         # if the package is already installed, do nothing
         installed_dir = os.path.join(
             self._prefix(for_builder=for_builder), "var", "lib", "cibuildpkg"
@@ -222,31 +244,7 @@ class Builder:
                 configure_args += ["--target=x86_64-win64-gcc"]
         
         # build package
-        os.makedirs(package_build_path, exist_ok=True)
-
-        if package.name == "ffmpeg":
-            try:
-                print(3333333)
-                run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(4444444)
-                run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(55555555)
-                run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(66666666666)
-                print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
-                shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
-            except Exception as err:
-                print(err)
-        
+        os.makedirs(package_build_path, exist_ok=True)        
         with chdir(package_build_path):
             run(
                 [
@@ -295,25 +293,7 @@ class Builder:
             run(["cmake", "--install", "."], env=env)
 
     def _build_with_meson(self, package: Package, for_builder: bool) -> None:
-        assert package.build_system == "meson"
-        
-        if package.name == "dav1d":
-            try:
-                print(33333332)
-                run(["ls", "-al", "C:\\cibw\\vendor\\lib\\pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(44444442)
-                run(["ls", "-al", "C:/cibw/vendor/lib/pkgconfig"])
-            except Exception as err:
-                print(err)
-            try:
-                print(555555552)
-                run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
-            except Exception as err:
-                print(err)
-            
+        assert package.build_system == "meson"            
         package_path = os.path.join(self.build_dir, package.name)
         package_source_path = os.path.join(package_path, package.source_dir)
         package_build_path = os.path.join(package_path, package.build_dir)
