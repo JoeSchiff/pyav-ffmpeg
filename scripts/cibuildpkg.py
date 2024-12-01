@@ -273,7 +273,7 @@ class Builder:
         os.makedirs(package_build_path, exist_ok=True)       
 
         if package.name == "ffmpeg":
-            run(["pkg-config", "--define-prefix", "--cflags", "--libs", "C:/cibw/vendor/lib/pkgconfig/aom.pc"])
+            run(["pkg-config", "--define-prefix", "--cflags", "--libs", "C:\\cibw\\vendor\\lib\\pkgconfig\\aom.pc"])
             
         with chdir(package_build_path):
             run(
