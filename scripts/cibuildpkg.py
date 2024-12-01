@@ -429,7 +429,9 @@ class Builder:
             self._mangle_path(os.path.join(prefix, "lib", "pkgconfig")),
             separator=":",
         )
-
+        import shutil
+        shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/lib/pkgconfig/aom.pc")
+        
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
             for var in ["CFLAGS", "CXXFLAGS", "LDFLAGS"]:
