@@ -468,9 +468,9 @@ class Builder:
 
     def _mangle_path(self, path: str) -> str:
         if platform.system() == "Windows":
-            print(f"_mangle_path{path}")
-            path = subprocess.run(["cygpath", "-m", path]).stdout
-        print(f"_mangle_path{path}")
+            print(f"_mangle_path1{path}")
+            path = subprocess.run(["cygpath", "-m", path], capture_output=True).stdout
+        print(f"_mangle_path2{path}")
         return path
 
     def _prefix(self, *, for_builder: bool) -> str:
