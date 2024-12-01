@@ -61,6 +61,8 @@ jobs:
           cache: false
       - name: env var
         if: matrix.os == 'windows-latest'
+        env: 
+          PKG_CONFIG_PATH: /c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH
         run: |
           echo "PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
           export PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH
