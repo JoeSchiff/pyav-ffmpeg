@@ -469,7 +469,7 @@ class Builder:
     def _mangle_path(self, path: str) -> str:
         if platform.system() == "Windows":
             print(f"_mangle_path{path}")
-            path = run(["cygpath", "-m", path])
+            path = subprocess.run(["cygpath", "-m", path]).stdout
         print(f"_mangle_path{path}")
         return path
 
