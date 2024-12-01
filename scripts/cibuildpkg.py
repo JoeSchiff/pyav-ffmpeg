@@ -104,7 +104,20 @@ def run(cmd, env=None):
     except subprocess.CalledProcessError as e:
         print(f"stderr: {e.stderr}")
         raise e
+        
+def correct_pc_file():
+    file_path = '/c/cibw/vendor/lib/pkgconfig/aom.pc'
+    old_string = 'prefix=C:/cibw/vendor'
+    new_string = 'prefix=/c/cibw/vendor'
 
+    with open(file_path, 'r') as file:
+        content = file.read()
+
+    updated_content = content.replace(old_string, new_string)
+
+    with open(file_path, 'w') as file:
+        file.write(updated_content)
+    print("we can only hope")
 
 @dataclass
 class Package:
@@ -188,6 +201,9 @@ class Builder:
         os.makedirs(installed_dir, exist_ok=True)
         with open(installed_file, "w") as fp:
             fp.write("installed\n")
+
+        if package.name == "aom":
+            correct_pc_file()
 
     def create_directories(self) -> None:
         # print debugging information
