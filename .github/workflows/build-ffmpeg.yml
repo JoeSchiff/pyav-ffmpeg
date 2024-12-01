@@ -63,6 +63,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           echo "PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          export PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH
           echo check here: $PKG_CONFIG_PATH
           echo $GITHUB_ENV
       - name: Build FFmpeg
