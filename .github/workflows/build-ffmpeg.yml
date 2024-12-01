@@ -63,6 +63,9 @@ jobs:
         if: matrix.os == 'windows-latest'
         env: 
           PKG_CONFIG_PATH: /c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH
+          PKG_CONFIG_SYSTEM_INCLUDE_PATH: /c/msys64/mingw64/include
+          PKG_CONFIG_SYSTEM_LIBRARY_PATH: /c/msys64/mingw64/lib
+          SYSTEMDRIVE: /c/
         run: |
           echo "PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
           export PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH
