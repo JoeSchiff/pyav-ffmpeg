@@ -155,7 +155,16 @@ class Builder:
             print(os.listdir('/c/cibw/vendor/lib/pkgconfig'))
         except Exception as err:
             print(err)
-        
+        try:
+            print(777777777)
+            print(os.listdir('C:/cibw/vendor/lib/pkgconfig'))
+        except Exception as err:
+            print(err)
+        try:
+            print(88888888888)
+            print(os.listdir('C:\\cibw\\vendor\\lib\\pkgconfig'))
+        except Exception as err:
+            print(err)
         # if the package is already installed, do nothing
         installed_dir = os.path.join(
             self._prefix(for_builder=for_builder), "var", "lib", "cibuildpkg"
