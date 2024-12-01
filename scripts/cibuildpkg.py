@@ -106,7 +106,7 @@ def run(cmd, env=None):
         raise e
         
 def correct_pc_file():
-    file_path = '/c/cibw/vendor/lib/pkgconfig/aom.pc'
+    file_path = 'C:/cibw/vendor/lib/pkgconfig/aom.pc'
     old_string = 'prefix=C:/cibw/vendor'
     new_string = 'prefix=/c/cibw/vendor'
 
