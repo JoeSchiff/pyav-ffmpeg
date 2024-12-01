@@ -56,7 +56,6 @@ jobs:
         with:
           update: true
           install: base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm
-          path-type: inherit
           release: false
           cache: false
       - name: env var
@@ -90,7 +89,9 @@ jobs:
       - name: Failure
         if: ${{ failure() }}
         run: cat /d/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/build/ffbuild/config.log
-#        uses: mxschmitt/action-tmate@v3
+      - name: Failure2
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
       - name: Upload FFmpeg
         uses: actions/upload-artifact@v4
         with:
