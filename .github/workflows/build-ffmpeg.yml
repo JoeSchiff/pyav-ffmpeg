@@ -59,10 +59,12 @@ jobs:
           path-type: inherit
           release: false
           cache: false
-          run: |
-            echo "PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
-            echo check here: $PKG_CONFIG_PATH
-            echo $GITHUB_ENV
+      - name: env var
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          echo check here: $PKG_CONFIG_PATH
+          echo $GITHUB_ENV
       - name: Build FFmpeg
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
