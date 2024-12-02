@@ -224,6 +224,7 @@ class Builder:
         os.makedirs(package_build_path, exist_ok=True)
 
         if package.name == "ffmpeg":
+            print('all env vars')
             for k,v in env.items():
                 print(k,v)
         
@@ -421,7 +422,7 @@ class Builder:
         prepend_env(
             env,
             "PKG_CONFIG_PATH",
-            "/c/cibw/vendor/lib/pkgconfig",
+            'C:/cibw/vendor/lib/pkgconfig',
             separator=":",
         )
         
