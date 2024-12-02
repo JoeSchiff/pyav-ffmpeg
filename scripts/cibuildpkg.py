@@ -414,7 +414,7 @@ class Builder:
             env, "LDFLAGS", "-L" + self._mangle_path(os.path.join(prefix, "lib"))
         )
 
-        env["PKG_CONFIG_PATH"] ='C:/cibw/vendor/lib/pkgconfig'
+        env["PKG_CONFIG_PATH"] ='C:\\cibw\\vendor\\lib\\pkgconfig'
         
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
