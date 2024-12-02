@@ -416,7 +416,7 @@ class Builder:
         prepend_env(
             env,
             "PKG_CONFIG_PATH",
-            'C:\\cibw\\vendor\\lib\\pkgconfig',
+            'C:/cibw/vendor/lib/pkgconfig',
             separator=";",
         )
         
