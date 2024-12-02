@@ -71,6 +71,9 @@ jobs:
           pip install cibuildwheel delvewheel
           cibuildwheel --output-dir output
           rm -f output/*.whl
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
       - name: Print Windows ffbuild/config.log
         if: ${{ failure() && matrix.os == 'windows-latest' }}
         run: cat /d/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/build/ffbuild/config.log
