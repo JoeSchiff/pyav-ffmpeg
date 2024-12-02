@@ -222,6 +222,11 @@ class Builder:
 
         # build package
         os.makedirs(package_build_path, exist_ok=True)
+
+        if package.name == "ffmpeg":
+            for k,v in env.items():
+                print(k,v)
+        
         with chdir(package_build_path):
             run(
                 [
@@ -399,6 +404,9 @@ class Builder:
 
         prefix = self._prefix(for_builder=for_builder)
         prepend_env(
+            env, "MSYS2_ENV_CONV_EXCL", "PKG_CONFIG_PATH")
+        )
+        prepend_env(
             env, "CPPFLAGS", "-I" + self._mangle_path(os.path.join(prefix, "include"))
         )
         prepend_env(
@@ -410,7 +418,13 @@ class Builder:
             self._mangle_path(os.path.join(prefix, "lib", "pkgconfig")),
             separator=":",
         )
-
+        prepend_env(
+            env,
+            "PKG_CONFIG_PATH",
+            "/c/cibw/vendor/lib/pkgconfig",
+            separator=":",
+        )
+        
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
             for var in ["CFLAGS", "CXXFLAGS", "LDFLAGS"]:
