@@ -76,7 +76,7 @@ jobs:
         run: cat /d/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/build/ffbuild/config.log
       - name: Print Unix/Mac ffbuild/config.log
         if: matrix.os != 'windows-latest'
-        run: cat /project/build/ffmpeg/ffbuild/config.log
+        run: find / -path "*/ffbuild/config.log" -type f -exec sh -c 'echo "=== found ffbuild/config.log {} ==="; cat {}' \;
       - name: Upload FFmpeg
         uses: actions/upload-artifact@v4
         with:
