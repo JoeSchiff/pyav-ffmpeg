@@ -226,7 +226,7 @@ class Builder:
         if package.name == "ffmpeg":
             print(99999999)
             try:
-                shutil.copy("C:\\cibw\\vendor\\lib\\pkgconfig\\aom.pc", "/usr/share/pkgconfig/aom.pc")
+                shutil.copy("C:\\cibw\\vendor\\lib\\pkgconfig\\aom.pc", "C:\\msys64\\usr\\share\\aom.pc")
             except Exception as err:
                 print(err)
         
