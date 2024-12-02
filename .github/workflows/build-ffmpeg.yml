@@ -61,20 +61,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_BEFORE_BUILD_WINDOWS: |
-            set MSYS2_ENV_CONV_EXCL=PKG_CONFIG_PATH && set PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig && python scripts\build-ffmpeg.py C:\cibw\vendor --enable-gpl
-      - name: Build FFmpeg2
-        if: matrix.os == 'ubuntu-latest'
-        env:
-          CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_BEFORE_BUILD: python scripts/build-ffmpeg.py /tmp/vendor --enable-gpl
-      - name: Build FFmpeg3
-        env:
-          CIBW_BUILD: cp39-*
-          CIBW_REPAIR_WHEEL_COMMAND_LINUX: LD_LIBRARY_PATH=/tmp/vendor/lib:$LD_LIBRARY_PATH auditwheel repair -w {dest_dir} {wheel}
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: delvewheel repair --add-path C:\cibw\vendor\bin -w {dest_dir} {wheel}
-          CIBW_SKIP: "*musllinux*"
-          CIBW_TEST_COMMAND: python -c "import dummy"
+          CIBW_BEFORE_BUILD_WINDOWS: set MSYS2_ENV_CONV_EXCL=PKG_CONFIG_PATH && set PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig && python scripts\build-ffmpeg.py C:\cibw\vendor --enable-gpl
         run: |
           pip install cibuildwheel delvewheel
           cibuildwheel --output-dir output
