@@ -411,13 +411,6 @@ def main():
     elif plat == "Windows":
         libraries = glob.glob(os.path.join(dest_dir, "bin", "*.dll"))
 
-    # strip libraries
-    if plat == "Darwin":
-        run(["strip", "-S"] + libraries)
-        run(["otool", "-L"] + libraries)
-    else:
-        run(["strip", "-s"] + libraries)
-
     # build output tarball
     if build_stage is None or build_stage == 1:
         os.makedirs(output_dir, exist_ok=True)
