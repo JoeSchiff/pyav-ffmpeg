@@ -71,6 +71,12 @@ jobs:
           pip install cibuildwheel delvewheel
           cibuildwheel --output-dir output
           rm -f output/*.whl
+      - name: Print Windows ffbuild/config.log
+        if: ${{ failure() && matrix.os == 'windows-latest' }}
+        run: cat /d/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/build/ffbuild/config.log
+      - name: Print Unix/Mac ffbuild/config.log
+        if: matrix.os != 'windows-latest'
+        run: cat /project/build/ffmpeg/ffbuild/config.log
       - name: Upload FFmpeg
         uses: actions/upload-artifact@v4
         with:
