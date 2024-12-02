@@ -416,14 +416,8 @@ class Builder:
         prepend_env(
             env,
             "PKG_CONFIG_PATH",
-            self._mangle_path(os.path.join(prefix, "lib", "pkgconfig")),
-            separator=":",
-        )
-        prepend_env(
-            env,
-            "PKG_CONFIG_PATH",
-            'C:/cibw/vendor/lib/pkgconfig',
-            separator=":",
+            'C:\\cibw\\vendor\\lib\\pkgconfig',
+            separator=";",
         )
         
         if platform.system() == "Darwin" and not for_builder:
