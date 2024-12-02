@@ -95,7 +95,7 @@ def prepend_env(env, name, new, separator=" "):
         env[name] = new + separator + old
     else:
         env[name] = new
-
+    return env
 
 def run(cmd, env=None):
     log_print(f"- Running: {cmd}")
@@ -404,26 +404,22 @@ class Builder:
         env = os.environ.copy()
 
         prefix = self._prefix(for_builder=for_builder)
-        prepend_env(
+        env = prepend_env(
             env, "MSYS2_ENV_CONV_EXCL", "PKG_CONFIG_PATH"
         )
-        prepend_env(
+        env = prepend_env(
             env, "CPPFLAGS", "-I" + self._mangle_path(os.path.join(prefix, "include"))
         )
-        prepend_env(
+        env = prepend_env(
             env, "LDFLAGS", "-L" + self._mangle_path(os.path.join(prefix, "lib"))
         )
-        prepend_env(
-            env,
-            "PKG_CONFIG_PATH",
-            'C:/cibw/vendor/lib/pkgconfig',
-            separator=";",
-        )
+
+        env["PKG_CONFIG_PATH"] ='/c/cibw/vendor/lib/pkgconfig'
         
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
             for var in ["CFLAGS", "CXXFLAGS", "LDFLAGS"]:
-                prepend_env(env, var, arch_flags)
+                env = prepend_env(env, var, arch_flags)
 
         return env
 
