@@ -224,9 +224,11 @@ class Builder:
         os.makedirs(package_build_path, exist_ok=True)
 
         if package.name == "ffmpeg":
-            print('all env vars')
-            for k,v in env.items():
-                print(k,v)
+            print(99999999)
+            try:
+                shutil.copy("/c/cibw/vendor/lib/pkgconfig/aom.pc", "/usr/share/pkgconfig/aom.pc")
+            except Exception as err:
+                print(err)
         
         with chdir(package_build_path):
             run(
