@@ -404,7 +404,7 @@ class Builder:
 
         prefix = self._prefix(for_builder=for_builder)
         prepend_env(
-            env, "MSYS2_ENV_CONV_EXCL", "PKG_CONFIG_PATH")
+            env, "MSYS2_ENV_CONV_EXCL", "PKG_CONFIG_PATH"
         )
         prepend_env(
             env, "CPPFLAGS", "-I" + self._mangle_path(os.path.join(prefix, "include"))
