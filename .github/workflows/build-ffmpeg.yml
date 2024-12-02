@@ -64,7 +64,7 @@ jobs:
 #          CIBW_BEFORE_BUILD_WINDOWS: MSYS2_ENV_CONV_EXCL='PKG_CONFIG_PATH' PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig:$PKG_CONFIG_PATH python scripts\build-ffmpeg.py C:\cibw\vendor --enable-gpl
 
           CIBW_BEFORE_BUILD_WINDOWS: |
-            set MSYS2_ENV_CONV_EXCL=PKG_CONFIG_PATH &&
+            set MSYS2_ENV_CONV_EXCL='PKG_CONFIG_PATH' &&
             set PKG_CONFIG_PATH=/c/cibw/vendor/lib/pkgconfig &&
             python scripts\build-ffmpeg.py C:\cibw\vendor --enable-gpl
           
