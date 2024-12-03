@@ -49,6 +49,9 @@ jobs:
           pip install cibuildwheel delvewheel
           cibuildwheel --output-dir output
           rm -f output/*.whl
+      - name: fail
+        if: failure()
+        run: find /c -name configure.ac
       - name: Upload FFmpeg
         uses: actions/upload-artifact@v4
         with:
