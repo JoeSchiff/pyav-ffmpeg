@@ -224,14 +224,17 @@ class Builder:
                     configure_args += ["--target=x86_64-darwin20-gcc"]
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
-
-        if package.name == "ffmpeg":
-            print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc')
-            print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
         
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
+            if package.name == "ffmpeg":
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc')
+                print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
+                with open(self._mangle_path(os.path.join(package_source_path, "configure"))) as my_file:
+                    print(my_file.read())
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadd')
+            
             run(
                 [
                     "sh",
