@@ -254,6 +254,13 @@ def main():
         packages = [p for p_list in package_groups for p in p_list]
 
     for package in packages:
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        os.environ['PKG_CONFIG_PATH'] = f"/c/cibw/vendor/lib/pkgconfig:{os.environ['PKG_CONFIG_PATH']}"
+        print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
+        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+        subprocess.run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
+        print('ccccccccccccccccccccccccccccccccccccc')
+        print(os.listdir("/c/cibw/vendor/lib/pkgconfig"))
         if disable_gpl and package.gpl:
             if package.name == "x264":
                 builder.build(openh264)
@@ -306,14 +313,6 @@ def main():
     elif plat == "Windows":
         libraries = glob.glob(os.path.join(dest_dir, "bin", "*.dll"))
 
-
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-    os.environ['PKG_CONFIG_PATH'] = f"/c/cibw/vendor/lib/pkgconfig:{os.environ['PKG_CONFIG_PATH']}"
-    print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
-    print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-    subprocess.run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
-    print('ccccccccccccccccccccccccccccccccccccc')
-    print(os.listdir("/c/cibw/vendor/lib/pkgconfig"))
     
     # build output tarball
     if build_stage is None or build_stage == 1:
