@@ -233,9 +233,13 @@ class Builder:
                 print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
                 config_path = self._mangle_path(os.path.join(package_source_path, "configure"))
                 try:
-                    with open(config_path) as my_file:
-                        print(my_file.read())
+                    subprocess.run(["ls", "-al", package_source_path])
                     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadd')
+                except Exception as err:
+                    print(err)
+                try:
+                    subprocess.run(["ls", "-al", self._mangle_path(package_source_path)])
+                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff')
                 except Exception as err:
                     print(err)
                 config_path = "D:/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/configure"
