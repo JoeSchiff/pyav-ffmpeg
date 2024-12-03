@@ -253,6 +253,14 @@ def main():
     else:
         packages = [p for p_list in package_groups for p in p_list]
 
+    for package in packages:
+        if disable_gpl and package.gpl:
+            if package.name == "x264":
+                builder.build(openh264)
+            else:
+                pass
+        else:
+            builder.build(package)
 
     if plat == "Windows" and (build_stage is None or build_stage == 1):
         # fix .lib files being installed in the wrong directory
