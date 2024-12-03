@@ -108,9 +108,54 @@ def run(cmd, env=None):
 
 def correct_configure():
     file_path = "D:/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/configure"
-    old_string = 'check_pkg_config "$@" || die "ERROR: $pkg_version not found using pkg-config$pkg_config_fail_message"'
-    new_string = 'check_pkg_config "$@" || die "ERRORhoooosker: $pkg_version not found using pkg-config$pkg_config_fail_message"'
-    
+
+    old_string = """
+test_pkg_config(){
+    log test_pkg_config "$@"
+    name="$1"
+    pkg_version="$2"
+    pkg="${2%% *}"
+    headers="$3"
+    funcs="$4"
+    shift 4
+    disable $name
+    test_cmd $pkg_config --exists --print-errors $pkg_version || return
+    pkg_cflags=$($pkg_config --cflags $pkg_config_flags $pkg)
+    pkg_libs=$($pkg_config --libs $pkg_config_flags $pkg)
+    pkg_incdir=$($pkg_config --variable=includedir $pkg_config_flags $pkg)
+    check_func_headers "$headers" "$funcs" $pkg_cflags $pkg_libs "$@" &&
+        enable $name &&
+        set_sanitized "${name}_cflags"    $pkg_cflags &&
+        set_sanitized "${name}_incdir"    $pkg_incdir &&
+        set_sanitized "${name}_extralibs" $pkg_libs
+}
+"""
+
+    new_string = """
+test_pkg_config(){
+    log test_pkg_config "$@"
+    name="$1"
+    pkg_version="$2"
+    pkg="${2%% *}"
+    headers="$3"
+    funcs="$4"
+    shift 4
+    disable $name
+    echo hows your mum
+    echo $pkg_version
+    test_cmd $pkg_config --exists --print-errors $pkg_version || return
+    pkg_cflags=$($pkg_config --cflags $pkg_config_flags $pkg)
+    pkg_libs=$($pkg_config --libs $pkg_config_flags $pkg)
+    pkg_incdir=$($pkg_config --variable=includedir $pkg_config_flags $pkg)
+    check_func_headers "$headers" "$funcs" $pkg_cflags $pkg_libs "$@" &&
+        enable $name &&
+        set_sanitized "${name}_cflags"    $pkg_cflags &&
+        set_sanitized "${name}_incdir"    $pkg_incdir &&
+        set_sanitized "${name}_extralibs" $pkg_libs
+}
+"""
+
+
     with open(file_path, 'r') as file:
         content = file.read()
     
@@ -119,7 +164,10 @@ def correct_configure():
     with open(file_path, 'w') as file:
         file.write(updated_content)
     print("correct_configure complete")
-    
+    with open(file_path, 'r') as file:
+        file.read(updated_content)
+    print("babioom")
+
 
 @dataclass
 class Package:
