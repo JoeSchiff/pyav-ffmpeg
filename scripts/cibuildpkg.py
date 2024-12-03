@@ -119,7 +119,7 @@ def correct_configure():
     with open(file_path, 'w') as file:
         file.write(updated_content)
     print("correct_configure complete")
-
+    
 
 @dataclass
 class Package:
@@ -221,10 +221,10 @@ class Builder:
                 shutil.copy(cache_path, script_path)
                 os.chmod(script_path, 0o755)
 
-        # determine  arguments
+        # determine configure arguments
         env = self._environment(for_builder=for_builder)
         prefix = self._prefix(for_builder=for_builder)
-        _args = [
+        configure_args = [
             "--disable-static",
             "--enable-shared",
             "--libdir=" + self._mangle_path(os.path.join(prefix, "lib")),
@@ -234,28 +234,18 @@ class Builder:
         if package.name == "vpx":
             if platform.system() == "Darwin":
                 if platform.machine() == "arm64":
-                    _args += ["--target=arm64-darwin20-gcc"]
+                    configure_args += ["--target=arm64-darwin20-gcc"]
                 elif platform.machine() == "x86_64":
-                    _args += ["--target=x86_64-darwin20-gcc"]
+                    configure_args += ["--target=x86_64-darwin20-gcc"]
             elif platform.system() == "Windows":
-                _args += ["--target=x86_64-win64-gcc"]
+                configure_args += ["--target=x86_64-win64-gcc"]
         
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
             if package.name == "ffmpeg":
-
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc')
-                print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
                 correct_configure()
-
-                config_path = "D:/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/configure"
-                try:
-                    with open(config_path) as my_file:
-                        print(my_file.read())
-                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaee')
-                except Exception as err:
-                    print(err)
 
             run(
                 [
