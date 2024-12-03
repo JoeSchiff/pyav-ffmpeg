@@ -225,10 +225,9 @@ class Builder:
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
 
-       if package.name == "ffmpeg":
+        if package.name == "ffmpeg":
             print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc')
             print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
-            
         
         # build package
         os.makedirs(package_build_path, exist_ok=True)
