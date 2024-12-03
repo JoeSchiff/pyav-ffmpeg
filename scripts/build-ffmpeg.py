@@ -9,6 +9,13 @@ from cibuildpkg import Builder, Package, fetch, get_platform, log_group, run
 
 plat = platform.system()
 
+print('aaaaaaaaaaaaaaa')
+print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
+os.environ['PKG_CONFIG_PATH']=f"/c/cibw/vendor/lib/pkgconfig:{os.environ['PKG_CONFIG_PATH']}"
+print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
+print('bbbbbbbbbbbbbbb')
+
+
 library_group = [
     Package(
         name="xz",
