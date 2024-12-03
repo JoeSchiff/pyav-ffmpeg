@@ -165,7 +165,7 @@ test_pkg_config(){
         file.write(updated_content)
     print("correct_configure complete")
     with open(file_path, 'r') as file:
-        file.read(updated_content)
+        file.read()
     print("babioom")
 
 
