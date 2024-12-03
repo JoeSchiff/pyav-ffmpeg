@@ -109,7 +109,7 @@ def run(cmd, env=None):
 def correct_configure():
     file_path = "D:/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/configure"
     old_string = "test_cmd $pkg_config --exists --print-errors $pkg_version || return"
-    new_string = "test_cmd $pkg_config --exists --print-errors '$pkg_version' || return"
+    new_string = "test_cmd $pkg_config --exists --print-errors $pkg || return"
     
     with open(file_path, 'r') as file:
         content = file.read()
