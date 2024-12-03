@@ -134,6 +134,11 @@ class Builder:
         self.source_dir = os.path.abspath("source")
 
     def build(self, package: Package, *, for_builder: bool = False):
+
+        if package.name == "ffmpeg":
+            print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabb')
+            print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
+            
         # if the package is already installed, do nothing
         installed_dir = os.path.join(
             self._prefix(for_builder=for_builder), "var", "lib", "cibuildpkg"
@@ -220,6 +225,11 @@ class Builder:
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
 
+       if package.name == "ffmpeg":
+            print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc')
+            print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
+            
+        
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
