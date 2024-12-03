@@ -106,6 +106,21 @@ def run(cmd, env=None):
         raise e
 
 
+def correct_configure():
+    file_path = "D:/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/configure"
+    old_string = 'check_pkg_config "$@" || die "ERROR: $pkg_version not found using pkg-config$pkg_config_fail_message"'
+    new_string = 'check_pkg_config "$@" || die "ERRORhoosker: $pkg_version not found using pkg-config$pkg_config_fail_message"'
+    
+    with open(file_path, 'r') as file:
+        content = file.read()
+    
+    updated_content = content.replace(old_string, new_string)
+    
+    with open(file_path, 'w') as file:
+        file.write(updated_content)
+    print("correct_configure complete")
+
+
 @dataclass
 class Package:
     name: str
@@ -206,10 +221,10 @@ class Builder:
                 shutil.copy(cache_path, script_path)
                 os.chmod(script_path, 0o755)
 
-        # determine configure arguments
+        # determine  arguments
         env = self._environment(for_builder=for_builder)
         prefix = self._prefix(for_builder=for_builder)
-        configure_args = [
+        _args = [
             "--disable-static",
             "--enable-shared",
             "--libdir=" + self._mangle_path(os.path.join(prefix, "lib")),
@@ -219,29 +234,21 @@ class Builder:
         if package.name == "vpx":
             if platform.system() == "Darwin":
                 if platform.machine() == "arm64":
-                    configure_args += ["--target=arm64-darwin20-gcc"]
+                    _args += ["--target=arm64-darwin20-gcc"]
                 elif platform.machine() == "x86_64":
-                    configure_args += ["--target=x86_64-darwin20-gcc"]
+                    _args += ["--target=x86_64-darwin20-gcc"]
             elif platform.system() == "Windows":
-                configure_args += ["--target=x86_64-win64-gcc"]
+                _args += ["--target=x86_64-win64-gcc"]
         
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
             if package.name == "ffmpeg":
+
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacc')
                 print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=env))
-                config_path = self._mangle_path(os.path.join(package_source_path, "configure"))
-                try:
-                    subprocess.run(["ls", "-al", package_source_path])
-                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadd')
-                except Exception as err:
-                    print(err)
-                try:
-                    subprocess.run(["ls", "-al", self._mangle_path(package_source_path)])
-                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff')
-                except Exception as err:
-                    print(err)
+                correct_configure()
+
                 config_path = "D:/a/pyav-ffmpeg/pyav-ffmpeg/build/ffmpeg/configure"
                 try:
                     with open(config_path) as my_file:
@@ -250,7 +257,6 @@ class Builder:
                 except Exception as err:
                     print(err)
 
-            
             run(
                 [
                     "sh",
