@@ -90,97 +90,7 @@ codec_group = [
         source_url="https://code.videolan.org/videolan/dav1d/-/archive/1.4.1/dav1d-1.4.1.tar.bz2",
         build_system="meson",
     ),
-    Package(
-        name="lame",
-        source_url="http://deb.debian.org/debian/pool/main/l/lame/lame_3.100.orig.tar.gz",
-    ),
-    Package(
-        name="ogg",
-        source_url="http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz",
-    ),
-    Package(
-        name="opencore-amr",
-        source_url="http://deb.debian.org/debian/pool/main/o/opencore-amr/opencore-amr_0.1.5.orig.tar.gz",
-        # parallel build hangs on Windows
-        build_parallel=plat != "Windows",
-    ),
-    Package(
-        name="opus",
-        source_url="https://github.com/xiph/opus/releases/download/v1.4/opus-1.4.tar.gz",
-        build_arguments=["--disable-doc", "--disable-extra-programs"],
-    ),
-    Package(
-        name="speex",
-        source_url="http://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
-        build_arguments=["--disable-binaries"],
-    ),
-    Package(
-        name="twolame",
-        source_url="http://deb.debian.org/debian/pool/main/t/twolame/twolame_0.4.0.orig.tar.gz",
-        build_arguments=["--disable-sndfile"],
-    ),
-    Package(
-        name="vorbis",
-        requires=["ogg"],
-        source_url="http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz",
-    ),
-    Package(
-        name="vpx",
-        source_filename="vpx-1.14.0.tar.gz",
-        source_url="https://github.com/webmproject/libvpx/archive/v1.14.0.tar.gz",
-        build_arguments=[
-            "--disable-examples",
-            "--disable-tools",
-            "--disable-unit-tests",
-        ],
-    ),
-    Package(
-        name="png",
-        source_url="http://deb.debian.org/debian/pool/main/libp/libpng1.6/libpng1.6_1.6.37.orig.tar.gz",
-        # avoid an assembler error on Windows
-        build_arguments=["PNG_COPTS=-fno-asynchronous-unwind-tables"],
-    ),
-    Package(
-        name="webp",
-        source_filename="webp-1.4.0.tar.gz",
-        source_url="https://github.com/webmproject/libwebp/archive/refs/tags/v1.4.0.tar.gz",
-        build_system="cmake",
-        build_arguments=[
-            "-DWEBP_BUILD_ANIM_UTILS=OFF",
-            "-DWEBP_BUILD_CWEBP=OFF",
-            "-DWEBP_BUILD_DWEBP=OFF",
-            "-DWEBP_BUILD_GIF2WEBP=OFF",
-            "-DWEBP_BUILD_IMG2WEBP=OFF",
-            "-DWEBP_BUILD_VWEBP=OFF",
-            "-DWEBP_BUILD_WEBPINFO=OFF",
-            "-DWEBP_BUILD_WEBPMUX=OFF",
-            "-DWEBP_BUILD_BUILD_EXTRAS=OFF",
-        ],
-    ),
-    Package(
-        name="x264",
-        source_url="https://code.videolan.org/videolan/x264/-/archive/master/x264-master.tar.bz2",
-        # parallel build runs out of memory on Windows
-        build_parallel=plat != "Windows",
-        gpl=True,
-    ),
-    Package(
-        name="x265",
-        requires=["cmake"],
-        source_url="https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.5.tar.gz",
-        build_system="cmake",
-        source_dir="source",
-        gpl=True,
-    ),
 ]
-
-openh264 = Package(
-    name="openh264",
-    requires=["meson", "nasm", "ninja"],
-    source_filename="openh264-2.5.0.tar.gz",
-    source_url="https://github.com/cisco/openh264/archive/refs/tags/v2.5.0.tar.gz",
-    build_system="meson",
-)
 
 ffmpeg_package = Package(
     name="ffmpeg",
@@ -319,33 +229,16 @@ def main():
         "--enable-libaom",
         "--enable-libdav1d",
         "--enable-libmp3lame",
-        "--enable-libopencore-amrnb",
-        "--enable-libopencore-amrwb",
-        "--enable-libopus",
-        "--enable-libspeex",
-        "--enable-libtwolame",
-        "--enable-libvorbis",
-        "--enable-libvpx",
-        "--enable-libwebp",
+
         "--enable-libxcb" if plat == "Linux" else "--disable-libxcb",
         "--enable-libxml2",
         "--enable-lzma",
         "--enable-zlib",
         "--enable-version3",
+        "--disable-libopenh264"
     ]
-    if disable_gpl:
-        ffmpeg_package.build_arguments.extend(
-            ["--enable-libopenh264", "--disable-libx264"]
-        )
-    else:
-        ffmpeg_package.build_arguments.extend(
-            [
-                "--enable-libx264",
-                "--disable-libopenh264",
-                "--enable-libx265",
-                "--enable-gpl",
-            ]
-        )
+
+
     if plat == "Darwin":
         ffmpeg_package.build_arguments.extend(
             ["--enable-videotoolbox", "--extra-ldflags=-Wl,-ld_classic"]
@@ -360,14 +253,6 @@ def main():
     else:
         packages = [p for p_list in package_groups for p in p_list]
 
-    for package in packages:
-        if disable_gpl and package.gpl:
-            if package.name == "x264":
-                builder.build(openh264)
-            else:
-                pass
-        else:
-            builder.build(package)
 
     if plat == "Windows" and (build_stage is None or build_stage == 1):
         # fix .lib files being installed in the wrong directory
@@ -386,6 +271,8 @@ def main():
                     os.path.join(dest_dir, "bin", name + ".lib"),
                     os.path.join(dest_dir, "lib"),
                 )
+
+        os.makedirs("C:\\cibw\\vendor\\bin\\include\\lib")
 
         # copy some libraries provided by mingw
         mingw_bindir = os.path.dirname(
@@ -411,13 +298,15 @@ def main():
     elif plat == "Windows":
         libraries = glob.glob(os.path.join(dest_dir, "bin", "*.dll"))
 
-    # strip libraries
-    if plat == "Darwin":
-        run(["strip", "-S"] + libraries)
-        run(["otool", "-L"] + libraries)
-    else:
-        run(["strip", "-s"] + libraries)
 
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    os.environ['PKG_CONFIG_PATH'] = f"/c/cibw/vendor/lib/pkgconfig:{os.environ['PKG_CONFIG_PATH']}"
+    print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
+    print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+    subprocess.run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
+    print('ccccccccccccccccccccccccccccccccccccc')
+    print(os.listdir("/c/cibw/vendor/lib/pkgconfig"))
+    
     # build output tarball
     if build_stage is None or build_stage == 1:
         os.makedirs(output_dir, exist_ok=True)
@@ -426,3 +315,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    
