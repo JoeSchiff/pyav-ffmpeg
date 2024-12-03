@@ -9,12 +9,7 @@ from cibuildpkg import Builder, Package, fetch, get_platform, log_group, run
 
 plat = platform.system()
 
-print('aaaaaaaaaaaaaaa')
-print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
 os.environ['PKG_CONFIG_PATH']=f"/c/cibw/vendor/lib/pkgconfig:{os.environ['PKG_CONFIG_PATH']}"
-print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
-print('bbbbbbbbbbbbbbb')
-
 
 library_group = [
     Package(
@@ -368,6 +363,10 @@ def main():
         packages = [p for p_list in package_groups for p in p_list]
 
     for package in packages:
+        if package.name == "dav1d":
+            print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            print(subprocess.run(['pkg-config', '--modversion', 'aom'], shell=True, env=os.environ))
+            print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
         if disable_gpl and package.gpl:
             if package.name == "x264":
                 builder.build(openh264)
