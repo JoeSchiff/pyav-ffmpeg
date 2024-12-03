@@ -261,7 +261,6 @@ def main():
             print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
             subprocess.run(["ls", "-al", "/c/cibw/vendor/lib/pkgconfig"])
             print('ccccccccccccccccccccccccccccccccccccc')
-            print(os.listdir("/c/cibw/vendor/lib/pkgconfig"))
         if disable_gpl and package.gpl:
             if package.name == "x264":
                 builder.build(openh264)
