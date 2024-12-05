@@ -84,12 +84,6 @@ codec_group = [
         ],
         build_parallel=False,
     ),
-    Package(
-        name="dav1d",
-        requires=["meson", "nasm", "ninja"],
-        source_url="https://code.videolan.org/videolan/dav1d/-/archive/1.4.1/dav1d-1.4.1.tar.bz2",
-        build_system="meson",
-    ),
 ]
 
 ffmpeg_package = Package(
@@ -153,8 +147,6 @@ def main():
     # FFmpeg has native TLS backends for macOS and Windows
     use_gnutls = plat == "Linux"
 
-    if plat == "Linux" and os.environ.get("CIBUILDWHEEL") == "1":
-        output_dir = "/output"
     output_tarball = os.path.join(output_dir, f"ffmpeg-{get_platform()}.tar.gz")
 
     if os.path.exists(output_tarball):
@@ -227,9 +219,6 @@ def main():
         "--enable-gmp",
         "--enable-gnutls" if use_gnutls else "--disable-gnutls",
         "--enable-libaom",
-        "--enable-libdav1d",
-        "--enable-libmp3lame",
-
         "--enable-libxcb" if plat == "Linux" else "--disable-libxcb",
         "--enable-libxml2",
         "--enable-lzma",
@@ -238,11 +227,6 @@ def main():
         "--disable-libopenh264"
     ]
 
-
-    if plat == "Darwin":
-        ffmpeg_package.build_arguments.extend(
-            ["--enable-videotoolbox", "--extra-ldflags=-Wl,-ld_classic"]
-        )
 
     if use_gnutls:
         library_group += gnutls_group
@@ -306,18 +290,8 @@ def main():
             shutil.copy(os.path.join(mingw_bindir, name), os.path.join(dest_dir, "bin"))
 
     # find libraries
-    if plat == "Darwin":
-        libraries = glob.glob(os.path.join(dest_dir, "lib", "*.dylib"))
-    elif plat == "Linux":
-        libraries = glob.glob(os.path.join(dest_dir, "lib", "*.so"))
-    elif plat == "Windows":
-        libraries = glob.glob(os.path.join(dest_dir, "bin", "*.dll"))
+    libraries = glob.glob(os.path.join(dest_dir, "bin", "*.dll"))
 
-    
-    # build output tarball
-    if build_stage is None or build_stage == 1:
-        os.makedirs(output_dir, exist_ok=True)
-        run(["tar", "czvf", output_tarball, "-C", dest_dir, "bin", "include", "lib"])
 
 
 if __name__ == "__main__":
