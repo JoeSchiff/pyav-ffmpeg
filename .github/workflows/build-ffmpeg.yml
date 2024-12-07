@@ -41,7 +41,7 @@ jobs:
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BEFORE_ALL_LINUX: |
-            yum install -y openssl
+            yum install -y openssl-devel
             cp -ar vendor /tmp
           CIBW_BEFORE_BUILD: python scripts/build-ffmpeg.py /tmp/vendor --stage ${{ env.stage }}
           CIBW_BUILD: cp39-*
