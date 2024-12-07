@@ -36,7 +36,9 @@ jobs:
           name: stage-1-${{ matrix.os }}-${{ matrix.arch }}
           path: vendor
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: 12020330142
+          run-id: 12214717838
+      - name: Build FFmpeg
+        run: apt install -y openssl
       - name: Build FFmpeg
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
