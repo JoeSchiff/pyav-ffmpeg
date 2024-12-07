@@ -38,11 +38,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: 12214717838
       - name: Build FFmpeg
-        run: apt install -y openssl
-      - name: Build FFmpeg
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_BEFORE_ALL_LINUX: cp -ar vendor /tmp
+          CIBW_BEFORE_ALL_LINUX: |
+            yum install -y openssl
+            cp -ar vendor /tmp
           CIBW_BEFORE_BUILD: python scripts/build-ffmpeg.py /tmp/vendor --stage ${{ env.stage }}
           CIBW_BUILD: cp39-*
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: LD_LIBRARY_PATH=/tmp/vendor/lib:$LD_LIBRARY_PATH auditwheel repair -w {dest_dir} {wheel}
