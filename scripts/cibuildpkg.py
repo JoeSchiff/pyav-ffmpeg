@@ -239,9 +239,9 @@ class Builder:
         if package.name == "ffmpeg" and platform.system() == "Windows":
             correct_configure(os.path.join(package_source_path, "configure"))
             prepend_env(
-            env, "LDFLAGS", "-L" + "C:\\Program\ Files\\OpenSSL\\lib"
+            env, "LDFLAGS", "-L" + "C:/Program\ Files/OpenSSL/lib"
             )
-
+            print(111111111, env["LDFLAGS"])
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
