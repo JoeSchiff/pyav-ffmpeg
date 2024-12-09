@@ -106,6 +106,22 @@ def run(cmd, env=None):
         raise e
 
 
+def correct_configure(file_path):
+    """
+    Edit ffmpeg's configure file. Properly quote `$pkg_version` in function `test_pkg_config()`.
+    """
+    old_string = 'test_cmd $pkg_config --exists --print-errors $pkg_version || return'
+    new_string = 'test_cmd $pkg_config --exists --print-errors "$pkg_version" || return'
+    
+    with open(file_path, 'r') as file:
+        content = file.read()
+    
+    updated_content = content.replace(old_string, new_string)
+    
+    with open(file_path, 'w') as file:
+        file.write(updated_content)
+
+
 @dataclass
 class Package:
     name: str
@@ -220,6 +236,10 @@ class Builder:
             elif platform.system() == "Windows":
                 configure_args += ["--target=x86_64-win64-gcc"]
 
+        if package.name == "ffmpeg" and platform.system() == "Windows":
+            correct_configure(os.path.join(package_source_path, "configure"))
+            
+
         # build package
         os.makedirs(package_build_path, exist_ok=True)
         with chdir(package_build_path):
@@ -254,6 +274,9 @@ class Builder:
         ]
         if platform.system() == "Darwin":
             cmake_args.append("-DCMAKE_INSTALL_NAME_DIR=" + os.path.join(prefix, "lib"))
+            
+        if package.name == "srt" and platform.system() == "Linux":
+            run(["yum", "-y", "install", "openssl-devel"])
 
         # build package
         os.makedirs(package_build_path, exist_ok=True)
@@ -410,7 +433,23 @@ class Builder:
             self._mangle_path(os.path.join(prefix, "lib", "pkgconfig")),
             separator=":",
         )
-
+        prepend_env(
+            env,
+            "PKG_CONFIG_PATH",
+            "/c/msys64/usr/lib/pkgconfig",
+            separator=":",
+        )
+        prepend_env(
+            env,
+            "PATH",
+            "/c/Program Files/OpenSSL/lib",
+            separator=":",
+        )
+        prepend_env(
+            env, "LDFLAGS", "-L" + "/c/Program Files/OpenSSL/lib"
+        )
+        
+        
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
             for var in ["CFLAGS", "CXXFLAGS", "LDFLAGS"]:
