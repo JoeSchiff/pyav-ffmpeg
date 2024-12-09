@@ -445,10 +445,6 @@ class Builder:
             "/c/Program Files/OpenSSL/lib",
             separator=":",
         )
-        prepend_env(
-            env, "LDFLAGS", "-L" + "/c/Program Files/OpenSSL/lib"
-        )
-        
         
         if platform.system() == "Darwin" and not for_builder:
             arch_flags = os.environ["ARCHFLAGS"]
