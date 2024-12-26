@@ -143,7 +143,7 @@ test_pkg_config(){
     disable $name
     echo hows your mum
     echo $pkg_version
-    test_cmd $pkg_config --exists --print-errors $pkg_version || return
+    test_cmd $pkg_config --exists --print-errors "$pkg_version" || return
     pkg_cflags=$($pkg_config --cflags $pkg_config_flags $pkg)
     pkg_libs=$($pkg_config --libs $pkg_config_flags $pkg)
     pkg_incdir=$($pkg_config --variable=includedir $pkg_config_flags $pkg)
@@ -158,14 +158,13 @@ test_pkg_config(){
 
     with open(file_path, 'r') as file:
         content = file.read()
-    
     updated_content = content.replace(old_string, new_string)
     
     with open(file_path, 'w') as file:
         file.write(updated_content)
     print("correct_configure complete")
     with open(file_path, 'r') as file:
-        file.read()
+        print(file.read())
     print("babioom")
 
 
