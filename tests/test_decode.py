@@ -238,3 +238,26 @@ class TestDecode(TestCase):
             frame_count += 1
 
         assert frame_count == video_stream.frames
+        
+    def test_libsvtav1(self) -> None:
+        if not "libsvtav1" in av.codecs_available:
+            pytest.skip()
+
+        output = av.open("output.mp4", "w")
+        stream = output.add_stream("libsvtav1")
+
+        for i in range(24):
+            frame = av.VideoFrame(200, 100, "rgb24")
+            frame.pts = i * 2000
+            frame.time_base = Fraction(1, 48000)
+            for packet in stream.encode(frame):
+                assert packet.time_base == Fraction(1, 24)
+                output.mux(packet)
+
+        for packet in stream.encode(None):
+            assert packet.time_base == Fraction(1, 24)
+            output.mux(packet)
+
+        assert output.streams[0].codec.name == "libsvtav1"
+        assert output.streams[0].codec.is_encoder is True
+        assert output.streams[0].frames == 24
