@@ -177,6 +177,12 @@ codec_group = [
         source_dir="source",
         gpl=True,
     ),
+    Package(
+        name="srt",
+        source_url="https://github.com/Haivision/srt/archive/refs/tags/v1.5.4.tar.gz",
+        build_system="cmake",
+        build_arguments=["-DENABLE_ENCRYPTION=OFF"],
+    ),
 ]
 
 openh264 = Package(
@@ -328,6 +334,7 @@ def main():
         "--enable-libopencore-amrwb",
         "--enable-libopus",
         "--enable-libspeex",
+        "--enable-libsrt",
         "--enable-libsvtav1",
         "--enable-libtwolame",
         "--enable-libvorbis",
