@@ -36,7 +36,7 @@ jobs:
             arch: AMD64
             shell: 'msys2 {0}'
           - os: ubuntu-24.04-arm
-            arch: arm64
+            arch: aarch64
             shell: bash
     defaults:
       run:
